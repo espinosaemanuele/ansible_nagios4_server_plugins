@@ -1,0 +1,6 @@
+# file: nagios-server/handlers/main.yml
+
+- name: Reload Nagios
+  service:
+    name: "{{ nagios_service }}"
+    state: reloaded

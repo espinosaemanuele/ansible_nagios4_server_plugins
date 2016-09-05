@@ -1,0 +1,5 @@
+---
+
+check_url_proxy_server: 'proxy_server'
+check_url_proxy_user: 'proxy_user'
+check_url_proxy_password: 'proxy_password'

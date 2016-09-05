@@ -1,0 +1,15 @@
+---
+# file: tasks/main.yml
+
+- include: multi_os.yml
+  tags:
+    - config_nagios_plugins
+    - test_nagios_plugins
+
+- include: config_plugins.yml
+  tags:
+    - config_nagios_plugins
+
+- include: tests.yml
+  tags:
+    - test_nagios_plugins

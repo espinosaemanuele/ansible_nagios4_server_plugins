@@ -1,0 +1,246 @@
+#! /usr/bin/perl -wT
+#----------------------------------------------------------------------
+#
+# Author: Martin Fuerstenau, martin.fuerstenau_at_genesix.de
+# Date:   01.08.2006
+#
+# Purpose:
+# Checking the status of a given website.
+#
+# - The site can be on the LAN or within the internet.
+# - The site can be behind a proxy with or without authentication.
+# - The plugin can handle proxy authentication on a user/password basis.
+#   Therefore a user and a password has to be submitted when calling the plugin
+# - The site can be whith or without authentication
+# - The plugin can handle website authentication.
+#   Therefore a user and a password has to be submitted when calling the plugin
+# - For easier use the commandline options of the plugin are based on the 
+#   syntax of wget.
+#
+# Changes:
+# 
+# - none
+# 
+# Synopsis:
+# 
+# check_url_status -U <URL> [--http-user=<user> [--http-passwd=<password>]] [-Y proxy[:port] [--proxy-user=<user> [--proxy-passwd=<password>]] [-T <timeout>]\n\n";
+#
+#----------------------------------------------------------------------
+
+use strict;
+use Getopt::Long;
+
+use lib "/usr/lib/nagios/plugins" ;
+use utils qw(%ERRORS &print_revision &support &usage );
+use vars qw($WHATSUP $VERSION $HELP $PROGNAME $hostname $host $url2check);
+use vars qw($time_to_wait $time_to_wait_default $proxy $user $pass $puser $ppass);
+
+use LWP::Simple;
+use HTTP::Status;
+use LWP::UserAgent;
+
+$PROGNAME = "check_url_status";
+
+$time_to_wait_default = 30;
+
+$ENV{'PATH'}='';
+$ENV{'BASH_ENV'}=''; 
+$ENV{'ENV'}='';
+		    
+Getopt::Long::Configure('bundling');
+GetOptions
+	("V"   => \$VERSION, "version"    => \$VERSION,
+	 "Y=s"   => \$proxy, "proxy=s"       => \$proxy,
+	 "T=s"   => \$time_to_wait, "timeout=s"       => \$time_to_wait,
+	 "http-user=s"       => \$user,
+	 "http-passwd=s"       => \$pass,
+	 "proxy-user=s"       => \$puser,
+	 "proxy-passwd=s"       => \$ppass,
+	 "h"   => \$HELP, "help"       => \$HELP,
+	 "U=s" => \$url2check, "url=s" => \$url2check);
+
+if ($VERSION)
+   {
+   print_revision($PROGNAME,'$Revision: 1.0 $');
+   exit $ERRORS{'OK'};
+   }
+
+if ($HELP)
+   {
+   print_help();
+   exit $ERRORS{'OK'};
+   }
+
+# A password without a user really does not make sense
+
+if ($pass)
+   {
+   if (!$user)
+      {
+      print_usage();
+      usage("You can not supply a user password without a user!\n");
+      }
+   }
+
+# A proxy-user or password without a proxy would not make any sense either.
+# The same with a proxy password without the appropriate user
+
+if (!$proxy)
+   {
+   if ($ppass)
+      {
+      print_usage();
+      usage("You can not supply a proxy-password without a proxy!\n");
+      }
+   if ($puser)
+      {
+      print_usage();
+      usage("You can not supply a proxy-user without a proxy!\n");
+      }
+   }
+else
+   {
+   if ($ppass)
+      {
+      if (!$puser)
+         {
+         print_usage();
+         usage("You can not supply a proxy-password without a proxy-user!\n");
+         }
+      }
+   }
+
+$WHATSUP=get_url_status();
+
+
+if ($WHATSUP == 0 )
+   {
+   exit $ERRORS{'OK'};
+   }
+   
+if ($WHATSUP == 1 )
+   {
+   exit $ERRORS{'WARNING'};
+   }
+
+if ($WHATSUP == 2 )
+   {
+   exit $ERRORS{'CRITICAL'};
+   }
+
+
+# --------------- Begin subroutines ----------------------------------------
+
+sub get_url_status
+    {
+    my $WARN_ME = 0;
+    my $url_status = 100;
+    my $status_string = "bla";
+    my $UserAgent;
+    my $request;
+    my $result;
+
+    $UserAgent = LWP::UserAgent->new;
+    $UserAgent->agent('Mozilla/5.0');
+
+    # If the timeout is not submitted via commandline the default value is used
+
+    if ($time_to_wait)
+       {
+       $UserAgent->timeout($time_to_wait);
+       }
+    else
+       {
+       $UserAgent->timeout($time_to_wait_default);
+       }
+
+    # If we use a proxy we have to prepare. Especially if we use authentiction
+    
+    if ($proxy)
+       {
+       if ($puser)
+          {
+          $proxy = "http://"."$puser".":"."$ppass"."\@"."$proxy";
+          $UserAgent->proxy(['http', 'https', 'ftp'] => $proxy);
+          }
+       else
+          {
+          $UserAgent->proxy(['http', 'https', 'ftp'] => $proxy);
+          }
+       }
+  
+    $request = new HTTP::Request 'GET' => $url2check;
+
+    if ($user)
+       {
+       $request->authorization_basic("$user" => "$pass");
+       }
+
+    $result = $UserAgent->request($request);
+    $url_status = $result->code();
+
+    # Get the status message from the status code
+
+    $status_string=status_message($url_status);
+    
+    # The usual shit. Make the output messages for Nagios
+    
+    if ($url_status =~ m/^1.*/ )
+       {
+       print "Information: HTTP Statuscode $url_status - $status_string";
+       }
+
+    if ($url_status =~ m/^2.*/ )
+       {
+       print "OK: HTTP Statuscode $url_status - $status_string";
+       }
+
+    if ($url_status =~ m/^3.*/ )
+       {
+       print "Redirect: HTTP Statuscode $url_status - $status_string";
+       }
+
+    if ($url_status =~ m/^4.*/ )
+       {
+       print "Client Error: HTTP Statuscode $url_status - $status_string";
+       $WARN_ME = 2;
+       }
+
+    if ($url_status =~ m/^5.*/ )
+       {
+       print "Server Error: HTTP Statuscode $url_status - $status_string\n";
+       $WARN_ME = 2;
+       }
+    return $WARN_ME; 
+    }
+
+sub print_usage
+    {
+    print "\nUsage: $PROGNAME -U <URL> [--http-user=<user> [--http-passwd=<password>]] [-Y proxy[:port] [--proxy-user=<user> [--proxy-passwd=<password>]] [-T <timeout>]\n\n";
+    print "or\n";
+    print "\nUsage: $PROGNAME -V for version.\n\n";
+    print "or\n";
+    print "\nUsage: $PROGNAME -h for help.\n\n";
+    }
+
+sub print_help
+    {
+    print_revision($PROGNAME,'$Revision: 1.0 $');
+    print "Copyright (c) 2006 Martin Fuerstenau - martin.fuerstenau_at_genesix.de\n";
+    print "This plugin monitors website and return the status of page requests according to RFC2616.\n";
+    print_usage();
+    print "       -U, --url=URL                  URL to check\n";
+    print "            --http-user=user          Supplies a user for logging into a website.\n";
+    print "            --http-passwd=password    The password for the website-user.\n";
+    print "       -Y proxy[:port]                Supplies the proxy and the port if necessary.\n";
+    print "            --proxy-user=user         Supplies a user for prox authentication.\n";
+    print "            --proxy-passwd=password   Supplies a user for prox authentication.\n";
+    print "       -T <timeout>                   Sets the timeout for the request. Default is 30 sec..\n";
+    print "       -h, --help                     Short help message\n";
+    print "       -V, --version                  Prints version of the plugin\n\n";
+    print "This plugin uses the libwww-perl.\n";
+    print "If you don't have the package installed, you will need to download it from\n";
+    print "http://www.cpan.org before you can use this plugin.\n\n";
+    support();
+    print "\n";
+    }

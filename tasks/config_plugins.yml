@@ -1,0 +1,34 @@
+---
+# file: task/config_plugins.yml
+
+- name: Install Plugins dependencies
+  package: name={{ item }} state=present
+  with_items:
+    - libnet-dns-perl  # required for check_iftraffic43a.pl
+    - libnagios-plugin-perl # required for hp ilo
+    - libxml-simple-perl # required for hp ilo
+    - php5-sybase # required for check_mssql.php
+    - update-notifier-common # Required for check_nrpe_os_update
+    - snmp
+
+- name: create plugins directory
+  file: 'path={{ nagios_config_cfg_dir }}/plugins owner=root group=root mode=755 state=directory'
+
+- name: Install Plugins
+  copy: 'src=plugins/ dest={{ nagios_plugins_dir }} owner=root group=root mode=755'
+
+- name: Configure Plugins
+  template: 
+    src: '{{ item.src }}'
+    dest: '{{ item.dest }}'
+    owner: 'root'
+    group: 'root'
+    mode: 0644
+  with_items:
+    - { src: 'check_nrpe.cfg.j2', dest: '/etc/nagios-plugins/config/check_nrpe.cfg' }
+    - { src: 'plugin-check_url_status.cfg.j2', dest: "{{ nagios_config_cfg_dir }}/plugins/plugin-check_url_status.cfg" }
+  notify: Reload Nagios
+
+- name: Configure commands for Plugins
+  copy: 'src=commands/ dest={{ nagios_config_cfg_dir }}/plugins/ owner=root group=root mode=755'
+  notify: Reload Nagios
