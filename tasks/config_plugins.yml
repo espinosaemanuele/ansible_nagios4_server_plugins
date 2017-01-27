@@ -20,13 +20,13 @@
 - name: Configure Plugins
   template: 
     src: '{{ item.src }}'
-    dest: '{{ item.dest }}'
+    dest: '{{ nagios_config_cfg_dir }}/plugins/{{ item.dest }}'
     owner: 'root'
     group: 'root'
     mode: 0644
   with_items:
-    - { src: 'check_nrpe.cfg.j2', dest: '/etc/nagios-plugins/config/check_nrpe.cfg' }
-    - { src: 'plugin-check_url_status.cfg.j2', dest: "{{ nagios_config_cfg_dir }}/plugins/plugin-check_url_status.cfg" }
+    - { src: 'check_nrpe.cfg.j2', dest: 'check_nrpe.cfg' }
+    - { src: 'plugin-check_url_status.cfg.j2', dest: "plugin-check_url_status.cfg.j2" }
   notify: Reload Nagios
 
 - name: Configure commands for Plugins
