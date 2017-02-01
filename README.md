@@ -28,7 +28,7 @@ Role Variables
 
 Uses vars/{{ ansible_distribution}}.yml 
 Commands are copied to {{ nagios_config_cfg_dir}}/plugins
-Plugins to /usr/lib/nagios/plugins
+Plugins to {{ nagios_plugins_dir }}
 
 For your hosts/groups_vars:
 

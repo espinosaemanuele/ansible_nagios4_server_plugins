@@ -1,22 +1,22 @@
 define command{
 	command_name	check_url_status_proxy
-	command_line	/usr/lib/nagios/plugins/check_url_status --url=http://$HOSTADDRESS$ -Y {{ check_url_proxy_server }} --proxy-user={{ check_url_proxy_user }} --proxy-passwd={{ check_url_proxy_password }}
+	command_line	{{ nagios_plugins_dir }}/check_url_status --url=http://$HOSTADDRESS$ -Y {{ check_url_proxy_server }} --proxy-user={{ check_url_proxy_user }} --proxy-passwd={{ check_url_proxy_password }}
 }
 
 # usage command   check_url_status_url!url
 define command{
 	command_name	check_url_status_url
-	command_line	/usr/lib/nagios/plugins/check_url_status --url=$ARG1$
+	command_line	{{ nagios_plugins_dir }}/check_url_status --url=$ARG1$
 }
 
 #Check URL with auth Custom status to use proxy
 define command{
 	command_name	check_url_auth_status
-	command_line	/usr/lib/nagios/plugins/check_url_status --url=http://$HOSTADDRESS$ --http-user=$ARG1$ --http-passwd=$ARG2$ -Y {{ check_url_proxy_server }} --proxy-user={{ check_url_proxy_user }} --proxy-passwd={{ check_url_proxy_password }}
+	command_line	{{ nagios_plugins_dir }}/check_url_status --url=http://$HOSTADDRESS$ --http-user=$ARG1$ --http-passwd=$ARG2$ -Y {{ check_url_proxy_server }} --proxy-user={{ check_url_proxy_user }} --proxy-passwd={{ check_url_proxy_password }}
 }
 
 #Check URL https Custom status to use proxy
 define command{
 	command_name	check_url_https_status
-	command_line	/usr/lib/nagios/plugins/check_url_status --url=https://$HOSTADDRESS$ -Y {{ check_url_proxy_server }} --proxy-user={{ check_url_proxy_user }} --proxy-passwd={{ check_url_proxy_password }}
+	command_line	{{ nagios_plugins_dir }}/check_url_status --url=https://$HOSTADDRESS$ -Y {{ check_url_proxy_server }} --proxy-user={{ check_url_proxy_user }} --proxy-passwd={{ check_url_proxy_password }}
 }
