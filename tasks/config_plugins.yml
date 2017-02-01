@@ -23,12 +23,13 @@
 - name: configure the commands for plugins
   template:
     src: "{{ item }}"
-    dest: "{{ nagios_config_cfg_plugins }}/{{ item }}"
+    dest: '{{ nagios_config_cfg_plugins }}/{{ item | basename | regex_replace("\.j2","") }}'
     owner: 'nagios'
     group: 'nagios'
     mode: 0644
   with_fileglob:
-    - "commands/*"
+    - ../templates/commands/*
+
   notify: Reload Nagios
 
 - name: Configure additional plugins

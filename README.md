@@ -4,7 +4,7 @@ nagios4_server_plugins
 This role installs and could add easily more plugins and commands plugins to nagios. 
 
 Just add the plugin to files/plugins
-Then add the commands to use it to files/commands
+Then add the commands to use it to templates/commands
 
 Those will be copied automatically to right place.
 
