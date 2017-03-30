@@ -11,6 +11,19 @@
     - update-notifier-common # Required for check_nrpe_os_update
     - snmp
 
+- name: upgrade pip
+  pip: name="pip" state="latest" executable=pip2
+  tags:
+    - skip-ansible-lint
+
+- name: Install plugins from pip packages
+  command: pip2 install {{ item }}
+  changed_when: false
+  with_items:
+    - "git+https://github.com/pablodav/nelmon.git"
+  tags:
+    - skip-ansible-lint
+
 - name: create plugins directory for plugins libs
   file: 'path={{ nagios_plugins_dir }} owner=root group=root mode=755 state=directory'
 
