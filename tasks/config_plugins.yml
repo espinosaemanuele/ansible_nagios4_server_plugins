@@ -17,7 +17,7 @@
     - skip-ansible-lint
 
 - name: Install plugins from pip packages
-  command: pip2 install {{ item }}
+  command: pip2 install --upgrade {{ item }}
   changed_when: false
   with_items:
     - "git+https://github.com/pablodav/nelmon.git"
