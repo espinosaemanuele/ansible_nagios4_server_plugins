@@ -10,17 +10,32 @@
     - php5-sybase # required for check_mssql.php
     - update-notifier-common # Required for check_nrpe_os_update
     - snmp
+    - python-pip
+    - python3-pip
 
 - name: upgrade pip
-  pip: name="pip" state="latest" executable=pip2
+  command: "pip install {{ nagios_plugins_required_pip }}"
+  changed_when: false
   tags:
     - skip-ansible-lint
 
 - name: Install plugins from pip packages
-  command: pip2 install --upgrade {{ item }}
+  command: "pip2 install {{ item }}"
   changed_when: false
-  with_items:
-    - "git+https://github.com/pablodav/nelmon.git"
+  with_items: "{{ nagios_plugins_pip2_packages }}"
+  tags:
+    - skip-ansible-lint
+
+- name: upgrade pip3
+  command: "pip3 install {{ nagios_plugins_required_pip }}"
+  changed_when: false
+  tags:
+    - skip-ansible-lint
+
+- name: Install plugins from pip packages
+  command: "pip3 install {{ item }}"
+  changed_when: false
+  with_items: "{{ nagios_plugins_pip3_packages }}"
   tags:
     - skip-ansible-lint
 
