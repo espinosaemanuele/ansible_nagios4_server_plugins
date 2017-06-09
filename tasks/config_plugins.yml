@@ -45,6 +45,14 @@
 - name: Install plugins on plugins dir
   copy: 'src=plugins/ dest={{ nagios_plugins_dir }} owner=root group=root mode=755'
 
+- name: Install plugins from git clone
+  git:
+    repo: "{{ item.repo }}"
+    clone: yes
+    dest: "{{ item.dest }}"
+    depth: 1
+  with_items: "{{ nagios_plugins_repos }}"
+
 - name: create plugins directory for commands cfg
   file: 'path={{ nagios_config_cfg_plugins }} owner=nagios group=nagios mode=775 state=directory'
 

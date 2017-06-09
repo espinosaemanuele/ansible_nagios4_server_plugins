@@ -21,3 +21,7 @@ nagios_plugins_pip2_packages:
     - "--upgrade git+https://github.com/pablodav/nelmon.git"    
 
 nagios_plugins_required_pip: "pip>=9.0.1"
+
+nagios_plugins_repos:
+    - repo: "https://github.com/jonschipp/nagios-plugins.git"
+      dest: "{{ nagios_plugins_dir }}/jonschipp"
