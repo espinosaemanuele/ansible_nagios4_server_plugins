@@ -12,6 +12,7 @@
     - snmp
     - python-pip
     - python3-pip
+    - python-pywbem # required for check_esx_wbem.py
 
 - name: upgrade pip
   command: "pip install {{ nagios_plugins_required_pip }}"
