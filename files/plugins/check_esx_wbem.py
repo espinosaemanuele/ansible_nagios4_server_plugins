@@ -65,7 +65,7 @@ if len(sys.argv) == 5 :
 
 # connection to host
 verboseoutput("Connection to "+sys.argv[1], verbose)
-wbemclient = pywbem.WBEMConnection(sys.argv[1], (sys.argv[2], sys.argv[3]), NS)
+wbemclient = pywbem.WBEMConnection(sys.argv[1], (sys.argv[2], sys.argv[3]), NS, no_verification=True)
 
 # run the check for each defined class
 GlobalStatus = ExitOK
