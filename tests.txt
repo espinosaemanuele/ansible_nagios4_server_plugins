@@ -1,0 +1,13 @@
+fails:
+
+TASK [ansible_nagios4_server_plugins : Install Plugins dependencies] ***********
+failed: [ansible-centos7] (item=libnet-dns-perl) => {"changed": false, "failed": true, "item": "libnet-dns-perl", "msg": "No package matching 'libnet-dns-perl' found available, installed or updated", "rc": 126, "results": ["No package matching 'libnet-dns-perl' found available, installed or updated"]}
+failed: [ansible-centos7] (item=libnagios-plugin-perl) => {"changed": false, "failed": true, "item": "libnagios-plugin-perl", "msg": "No package matching 'libnagios-plugin-perl' found available, installed or updated", "rc": 126, "results": ["No package matching 'libnagios-plugin-perl' found available, installed or updated"]}
+failed: [ansible-centos7] (item=libxml-simple-perl) => {"changed": false, "failed": true, "item": "libxml-simple-perl", "msg": "No package matching 'libxml-simple-perl' found available, installed or updated", "rc": 126, "results": ["No package matching 'libxml-simple-perl' found available, installed or updated"]}
+failed: [ansible-centos7] (item=php5-sybase) => {"changed": false, "failed": true, "item": "php5-sybase", "msg": "No package matching 'php5-sybase' found available, installed or updated", "rc": 126, "results": ["No package matching 'php5-sybase' found available, installed or updated"]}
+failed: [ansible-centos7] (item=update-notifier-common) => {"changed": false, "failed": true, "item": "update-notifier-common", "msg": "No package matching 'update-notifier-common' found available, installed or updated", "rc": 126, "results": ["No package matching 'update-notifier-common' found available, installed or updated"]}
+failed: [ansible-centos7] (item=snmp) => {"changed": false, "failed": true, "item": "snmp", "msg": "No package matching 'snmp' found available, installed or updated", "rc": 126, "results": ["No package matching 'snmp' found available, installed or updated"]}
+changed: [ansible-centos7] => (item=python-pip)
+failed: [ansible-centos7] (item=python3-pip) => {"changed": false, "failed": true, "item": "python3-pip", "msg": "No package matching 'python3-pip' found available, installed or updated", "rc": 126, "results": ["No package matching 'python3-pip' found available, installed or updated"]}
+failed: [ansible-centos7] (item=python-dev) => {"changed": false, "failed": true, "item": "python-dev", "msg": "No package matching 'python-dev' found available, installed or updated", "rc": 126, "results": ["No package matching 'python-dev' found available, installed or updated"]}
+
