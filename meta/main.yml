@@ -1,13 +1,16 @@
 ---
 galaxy_info:
   author: Diego Daguerre, Pablo Estigarribia
-  description: Install some nagios plugins
+  description: Install nagios plugins from multiple sources
   license: GPLv2
   min_ansible_version: 2.0
   platforms:
   - name: Ubuntu
     versions:
     - trusty
+  - name: Debian
+    versions:
+    - 8
   galaxy_tags:
   - Monitoring
   - Infraestructure
