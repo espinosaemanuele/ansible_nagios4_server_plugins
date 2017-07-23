@@ -37,3 +37,5 @@ ansible-centos7            : ok=34   changed=0    unreachable=0    failed=1
 ansible-debian8            : ok=48   changed=8    unreachable=0    failed=0
 ansible-trusty             : ok=49   changed=0    unreachable=0    failed=0
 ansible-ubuntu-latest      : ok=4    changed=0    unreachable=0    failed=1   
+
+Ubuntu latest: there are problems with php dependencies to fix in ansible-role-nagios role. 

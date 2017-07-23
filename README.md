@@ -1,10 +1,20 @@
 nagios4_server_plugins
-=========
+======================
+
+[![Build Status](https://travis-ci.org/CoffeeITWorks/ansible_nagios4_server_plugins.svg?branch=master)](https://travis-ci.org/CoffeeITWorks/ansible_nagios4_server_plugins)
 
 This role installs and could add easily more plugins and commands plugins to nagios. 
 
-Just add the plugin to files/plugins
-Then add the commands to use it to templates/commands
+Options to add plugins to your nagios: 
+
+* Just add the plugin to files/plugins
+* Edit some of the vars shown in [defaults/main.yml](defaults/main.yml) 
+  * clone repositories with `nagios_plugins_repos` var.
+  * Install from pip3 with `nagios_plugins_pip3_packages` var.
+  * Install from pip2 with `nagios_plugins_pip2_packages` var.
+  * add apt packages with `nagios_plugins_apt_packages` var.
+
+Then add the commands to use it, edit `templates/commands/command_file.cfg`.
 
 Those will be copied automatically to right place.
 
@@ -23,11 +33,13 @@ Role Distribution support
 Ubuntu: ok  
 Debian: ok
 RedHat: No  please check tests.txt file for details.
+Ubuntu latest: No  please check tests.txt file for details. 
 
 Role Variables
 --------------
 
-Uses vars/{{ ansible_distribution}}.yml 
+Check [defaults/main.yml](defaults/main.yml) 
+
 Commands are copied to {{ nagios_config_cfg_dir}}/plugins
 Plugins to {{ nagios_plugins_dir }}
 
@@ -83,6 +95,12 @@ Tags:
 
     config_nagios_plugins
     test_nagios_plugins
+
+We require some help to support centos7  
+
+TODO: 
+
+* add tests to use it with icinga 
 
 License
 -------
