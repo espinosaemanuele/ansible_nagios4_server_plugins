@@ -4,13 +4,14 @@ galaxy_info:
   description: Install nagios plugins from multiple sources
   license: GPLv2
   min_ansible_version: 2.0
+  # https://galaxy.ansible.com/api/v1/platforms/
   platforms:
   - name: Ubuntu
     versions:
     - trusty
   - name: Debian
     versions:
-    - 8
+    - jessie
   galaxy_tags:
   - Monitoring
   - Infraestructure
