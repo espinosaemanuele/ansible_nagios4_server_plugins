@@ -20,8 +20,9 @@ It requires you have nagios4_server already setup, recommended with our ansible 
 Role Distribution support
 ------------------------
 
-Ubuntu: ok
-RedHat: No
+Ubuntu: ok  
+Debian: ok
+RedHat: No  please check tests.txt file for details.
 
 Role Variables
 --------------

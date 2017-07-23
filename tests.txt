@@ -29,6 +29,9 @@ ok: [ansible-centos7] => (item=python-pip)
 failed: [ansible-centos7] (item=python3-pip) => {"changed": false, "failed": true, "item": "python3-pip", "msg": "No package matching 'python3-pip' found available, installed or updated", "rc": 126, "results": ["No package matching 'python3-pip' found available, installed or updated"]}
 failed: [ansible-centos7] (item=python-dev) => {"changed": false, "failed": true, "item": "python-dev", "msg": "No package matching 'python-dev' found available, installed or updated", "rc": 126, "results": ["No package matching 'python-dev' found available, installed or updated"]}
 
+To have centos7 working we need to add https://github.com/smbambling/ansible-role-scl dependency and manage some perl modules from here. 
+Help is needed to perform these tasks.
+
 PLAY RECAP *********************************************************************
 ansible-centos7            : ok=34   changed=0    unreachable=0    failed=1   
 ansible-debian8            : ok=48   changed=8    unreachable=0    failed=0
