@@ -31,8 +31,8 @@ Role Distribution support
 ------------------------
 
 Ubuntu: ok  
-Debian: ok
-RedHat: No  please check tests.txt file for details.
+Debian: ok  
+RedHat: No  please check tests.txt file for details.  
 Ubuntu latest: No  please check tests.txt file for details. 
 
 Role Variables
@@ -111,6 +111,4 @@ Author Information
 ------------------
 
 Main authors: Diego Daguerre, Pablo Estigarribia.
-Site: https://github.com/ansiblecoffee
-
-
+Site: https://github.com/CoffeeITWorks
