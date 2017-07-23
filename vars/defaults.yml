@@ -1,0 +1,6 @@
+#::::::::::::::
+# defaults.yml
+#::::::::::::::
+---
+
+nagios_service: nagios
