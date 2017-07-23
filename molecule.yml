@@ -15,11 +15,11 @@ docker:
         ansible_groups:
           - group1
       
-      - name: ansible-ubuntu-latest
-        image: ubuntu
-        image_version: latest
-        ansible_groups:
-          - group1
+      #- name: ansible-ubuntu-latest
+      #  image: ubuntu
+      #  image_version: latest
+      #  ansible_groups:
+      #    - group1
       
       - name: ansible-debian8
         image: debian
@@ -28,14 +28,14 @@ docker:
           - group_master
 
       # In docker cannot be tested with centos 7 due to https://github.com/ansible/ansible-modules-core/issues/593
-      - name: ansible-centos7
-        image: centos/systemd
-        image_version: latest
-        volume_mounts:
-          - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
-        privileged: True
-        ansible_groups:
-          - group1
+      #- name: ansible-centos7
+      #  image: centos/systemd
+      #  image_version: latest
+      #  volume_mounts:
+      #    - "/sys/fs/cgroup:/sys/fs/cgroup:ro"
+      #  privileged: True
+      #  ansible_groups:
+      #    - group1
 
 verifier:
   name: testinfra
