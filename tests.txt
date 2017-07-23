@@ -1,13 +1,36 @@
-fails:
+Actual fails: 
 
 TASK [ansible_nagios4_server_plugins : Install Plugins dependencies] ***********
+ok: [ansible-centos7] => (item=git)
+ok: [ansible-trusty] => (item=git)
+ok: [ansible-debian8] => (item=git)
+ok: [ansible-trusty] => (item=libnet-dns-perl)
 failed: [ansible-centos7] (item=libnet-dns-perl) => {"changed": false, "failed": true, "item": "libnet-dns-perl", "msg": "No package matching 'libnet-dns-perl' found available, installed or updated", "rc": 126, "results": ["No package matching 'libnet-dns-perl' found available, installed or updated"]}
+ok: [ansible-debian8] => (item=libnet-dns-perl)
+ok: [ansible-trusty] => (item=libnagios-plugin-perl)
+ok: [ansible-debian8] => (item=libnagios-plugin-perl)
 failed: [ansible-centos7] (item=libnagios-plugin-perl) => {"changed": false, "failed": true, "item": "libnagios-plugin-perl", "msg": "No package matching 'libnagios-plugin-perl' found available, installed or updated", "rc": 126, "results": ["No package matching 'libnagios-plugin-perl' found available, installed or updated"]}
+ok: [ansible-trusty] => (item=libxml-simple-perl)
+ok: [ansible-debian8] => (item=libxml-simple-perl)
+ok: [ansible-trusty] => (item=php5-sybase)
+ok: [ansible-debian8] => (item=php5-sybase)
 failed: [ansible-centos7] (item=libxml-simple-perl) => {"changed": false, "failed": true, "item": "libxml-simple-perl", "msg": "No package matching 'libxml-simple-perl' found available, installed or updated", "rc": 126, "results": ["No package matching 'libxml-simple-perl' found available, installed or updated"]}
+ok: [ansible-trusty] => (item=snmp)
+ok: [ansible-debian8] => (item=snmp)
 failed: [ansible-centos7] (item=php5-sybase) => {"changed": false, "failed": true, "item": "php5-sybase", "msg": "No package matching 'php5-sybase' found available, installed or updated", "rc": 126, "results": ["No package matching 'php5-sybase' found available, installed or updated"]}
-failed: [ansible-centos7] (item=update-notifier-common) => {"changed": false, "failed": true, "item": "update-notifier-common", "msg": "No package matching 'update-notifier-common' found available, installed or updated", "rc": 126, "results": ["No package matching 'update-notifier-common' found available, installed or updated"]}
+ok: [ansible-trusty] => (item=python-pip)
+ok: [ansible-debian8] => (item=python-pip)
+ok: [ansible-trusty] => (item=python3-pip)
+ok: [ansible-debian8] => (item=python3-pip)
 failed: [ansible-centos7] (item=snmp) => {"changed": false, "failed": true, "item": "snmp", "msg": "No package matching 'snmp' found available, installed or updated", "rc": 126, "results": ["No package matching 'snmp' found available, installed or updated"]}
-changed: [ansible-centos7] => (item=python-pip)
+ok: [ansible-trusty] => (item=python-dev)
+ok: [ansible-debian8] => (item=python-dev)
+ok: [ansible-centos7] => (item=python-pip)
 failed: [ansible-centos7] (item=python3-pip) => {"changed": false, "failed": true, "item": "python3-pip", "msg": "No package matching 'python3-pip' found available, installed or updated", "rc": 126, "results": ["No package matching 'python3-pip' found available, installed or updated"]}
 failed: [ansible-centos7] (item=python-dev) => {"changed": false, "failed": true, "item": "python-dev", "msg": "No package matching 'python-dev' found available, installed or updated", "rc": 126, "results": ["No package matching 'python-dev' found available, installed or updated"]}
 
+PLAY RECAP *********************************************************************
+ansible-centos7            : ok=34   changed=0    unreachable=0    failed=1   
+ansible-debian8            : ok=48   changed=8    unreachable=0    failed=0
+ansible-trusty             : ok=49   changed=0    unreachable=0    failed=0
+ansible-ubuntu-latest      : ok=4    changed=0    unreachable=0    failed=1   
