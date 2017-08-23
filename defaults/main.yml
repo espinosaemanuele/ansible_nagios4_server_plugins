@@ -38,3 +38,5 @@ nagios_plugins_required_pip: "pip>=9.0.1"
 nagios_plugins_repos:
     - repo: "https://github.com/jonschipp/nagios-plugins.git"
       dest: "{{ nagios_plugins_dir }}/jonschipp"
+
+nagios_config_commands_nrpe_port: 5666
