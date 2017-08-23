@@ -18,16 +18,18 @@ nagios_plugins_pip3_packages:
     - "nagios_sql>=0.5.0"
 
 nagios_plugins_pip2_packages:
+    - "setuptools>=35.0.2" # required to not fail when using git+https
     - "--upgrade git+https://github.com/pablodav/nelmon.git"
     - "M2Crypto>=0.26.0" # required for check_esxi_wbem.py
     - "pywbem>=0.10.0"  # required for https://exchange.nagios.org/directory/Plugins/Operating-Systems/%2A-Virtual-Environments/VMWare/Check-hardware-running-VMware-ESXi/details#_ga=2.89786515.94408166.1497532407-2035280105.1475087624
 
 nagios_plugins_apt_packages:
+    - git
     - libnet-dns-perl  # required for check_iftraffic43a.pl
     - libnagios-plugin-perl # required for hp ilo
     - libxml-simple-perl # required for hp ilo
     - php5-sybase # required for check_mssql.php
-    - update-notifier-common # Required for check_nrpe_os_update
+    #- update-notifier-common # Required for check_nrpe_os_update (only use it on client ubuntu, doesn't works on debian)
     - snmp
     - python-pip
     - python3-pip
