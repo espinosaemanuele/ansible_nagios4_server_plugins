@@ -31,7 +31,7 @@
     become: yes
     args:
       creates: "/bin/wmic"
-      chdir: "/root/wmi-1.3.34"
+      chdir: "/root/wmi-1.3.34/wmi-1.3.34"
 
 - name: plugin_checkwmiplus | create {{ nagios_plugins_dir_opt }} directory
   file: 
