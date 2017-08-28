@@ -24,7 +24,7 @@
   - name: plugin_checkwmiplus | Uncompress wmi
     unarchive:
       src: "plugin_checkwmiplus/wmi-1.3.14.tar.gz"
-      dest: "/root/wmi-1.3.34"
+      dest: "/root/wmi-1.3.14"
 
   - name: plugin_checkwmiplus | Compile and install wmic
     shell: 'make "CPP=gcc -E -ffreestanding"'
