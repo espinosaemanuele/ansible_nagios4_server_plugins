@@ -24,7 +24,8 @@
   - name: plugin_checkwmiplus | Compile and install wmic
     shell: make "CPP=gcc -E -ffreestanding"
     become: yes
-    creates: "/bin/wmic"
+    args:
+      creates: "/bin/wmic"
 
 - name: plugin_checkwmiplus | create {{ nagios_plugins_dir_opt }} directory
   file: 
