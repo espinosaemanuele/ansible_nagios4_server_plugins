@@ -10,6 +10,11 @@
   tags:
     - config_nagios_plugins
 
+- include: plugin_checkwmiplus.yml
+  when: nagios_plugins_install_checkwmiplus | bool
+  tags:
+    - config_nagios_plugins
+
 - include: tests.yml
   tags:
     - test_nagios_plugins

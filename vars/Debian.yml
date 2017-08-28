@@ -4,3 +4,10 @@
 ---
 
 nagios_service: nagios
+
+nagios_plugin_checkwmiplus_dependencies: 
+  - autoconf 
+  - gcc 
+  - time
+  - make
+  - wget

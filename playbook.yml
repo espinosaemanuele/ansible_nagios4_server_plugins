@@ -1,5 +1,15 @@
 ---
-- hosts: all
+
+- name: test with default settings
+  hosts: all
+  roles:
+    - role: ansible-role-nagios
+    - role: ansible_nagios4_server_plugins
+
+- name: Test with checkwmiplus
+  hosts: all
+  vars:
+    nagios_plugins_install_checkwmiplus: True
   roles:
     - role: ansible-role-nagios
     - role: ansible_nagios4_server_plugins

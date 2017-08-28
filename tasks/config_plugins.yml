@@ -36,7 +36,12 @@
   file: 'path={{ nagios_plugins_dir }} owner=root group=root mode=755 state=directory'
 
 - name: Install plugins on plugins dir
-  copy: 'src=plugins/ dest={{ nagios_plugins_dir }} owner=root group=root mode=755'
+  copy: 
+    src: plugins/ 
+    dest: "{{ nagios_plugins_dir }}"
+    owner: root 
+    group: root 
+    mode: 755
 
 - name: Install plugins from git clone
   git:

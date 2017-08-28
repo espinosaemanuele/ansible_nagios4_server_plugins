@@ -9,10 +9,13 @@ nagios_etc: '/usr/local/nagios/etc'
 nagios_config_cfg_dir: "{{ nagios_etc }}/conf.d"
 nagios_config_cfg_plugins: "{{ nagios_config_cfg_dir }}/plugins"
 nagios_plugins_dir: '/usr/lib/nagios/plugins'
+nagios_plugins_dir_opt: '/opt/nagios/bin/plugins' # used by checkwmiplus
 
 nagios_version: 4
 nagios_config_file: "{{ nagios_etc }}/nagios.cfg"
 nagios_cgi_file: "{{ nagios_etc }}/cgi.cfg"
+
+nagios_plugins_install_checkwmiplus: False
 
 nagios_plugins_pip3_packages:
     - "nagios_sql>=0.5.0"
