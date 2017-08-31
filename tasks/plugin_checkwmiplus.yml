@@ -44,3 +44,14 @@
     dest: "{{ nagios_plugins_dir_opt }}"
 
 # TODO: Add command and services templates
+
+- name: configure the commands for plugins
+  template:
+    src: "{{ item.src }}"
+    dest: '{{ nagios_config_cfg_plugins }}/{{ item.dest }}'
+    owner: 'nagios'
+    group: 'nagios'
+    mode: 0644
+  with_items:
+    - { src: 'plugin_checkwmiplus/plugin_checkwmiplus.cfg.j2', dest: 'plugin_checkwmiplus.cfg' }
+  notify: Reload Nagios
