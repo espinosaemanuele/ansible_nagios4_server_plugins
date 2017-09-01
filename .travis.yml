@@ -15,7 +15,7 @@ before_install:
 
 install:
   - pip install ansible
-  - pip install molecule
+  - pip install molecule==1.25.0 # needs to be ported to molecule 2 http://molecule.readthedocs.io/en/latest/porting.html
   # - pip install required driver (e.g. docker, python-vagrant, shade)
   - pip install docker
   - ansible-galaxy install -r requirements.yml
