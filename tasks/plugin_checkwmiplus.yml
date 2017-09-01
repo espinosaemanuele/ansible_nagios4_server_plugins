@@ -43,9 +43,13 @@
     src: "plugin_checkwmiplus/check_wmi_plus.v1.54.tar.gz"
     dest: "{{ nagios_plugins_dir_opt }}"
 
+- name: plugin_checkwmiplus | test plugin checkwmiplus
+  shell: perl {{ nagios_plugins_dir_opt }}/check_wmi_plus.pl --version
+  changed_when: False
+
 # TODO: Add command and services templates
 
-- name: configure the commands for plugins
+- name: plugin_checkwmiplus | configure the commands for checkwmi_plugins
   template:
     src: "{{ item.src }}"
     dest: '{{ nagios_config_cfg_plugins }}/{{ item.dest }}'
@@ -55,3 +59,9 @@
   with_items:
     - { src: 'plugin_checkwmiplus/plugin_checkwmiplus.cfg.j2', dest: 'plugin_checkwmiplus.cfg' }
   notify: Reload Nagios
+
+# TODO: Add
+# - The following $USER$ Macro are required and are defined in the Nagios config file normally called resource.cfg
+# - $USER6$ set to the installation directory for check_wmi_plus.pl.
+# - $USER8$ and $USER9$ set to the username and password used for accessing WMI on Windows.
+# to: {{ nagios_etc }}/resource.cfg

@@ -37,6 +37,10 @@ nagios_plugins_apt_packages:
     - python-pip
     - python3-pip
     - python-dev  # required for m2crypto
+    - nagios-plugins # required for some perl modules /usr/lib/nagios/plugins/utils.pm
+    - libnumber-format-perl # required for checkwmiplus
+    - libconfig-inifiles-perl # required for checkwmiplus
+    - libdatetime-perl # required for checkwmiplus
 
 nagios_plugins_required_pip: "pip>=9.0.1"
 
