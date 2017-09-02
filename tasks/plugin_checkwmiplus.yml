@@ -65,3 +65,16 @@
 # - $USER6$ set to the installation directory for check_wmi_plus.pl.
 # - $USER8$ and $USER9$ set to the username and password used for accessing WMI on Windows.
 # to: {{ nagios_etc }}/resource.cfg
+
+- name:  plugin_checkwmiplus | lineinfile - configure resource.cfg $USER6$ $USER8$ $USER9$
+  lineinfile: dest="{{ nagios_etc }}/resource.cfg" regexp='{{ item.src }}' line="{{ item.value }}"
+  with_items:
+  - src: "^$USER6$="
+    value: "$USER6$={{ nagios_plugins_dir_opt }}"
+  - src: "^$USER8$="
+    value: "$USER8$={{ nagios_plugins_USER8_wmi_username }}"    
+  - src: "^$USER9$="
+    value: "$USER9$={{ nagios_plugins_USER9_wmi_password }}"    
+  notify: Restart Nagios
+  tags:
+    - nagios_server_main_config
