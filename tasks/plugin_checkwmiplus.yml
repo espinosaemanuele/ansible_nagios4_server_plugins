@@ -75,6 +75,6 @@
     value: "$USER8$={{ nagios_plugins_USER8_wmi_username }}"    
   - src: "^$USER9$="
     value: "$USER9$={{ nagios_plugins_USER9_wmi_password }}"    
-  notify: Restart Nagios
+  notify: Reload Nagios
   tags:
     - nagios_server_main_config
