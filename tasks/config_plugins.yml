@@ -12,6 +12,12 @@
   with_items: "{{ nagios_plugins_apt_packages }}"
   when: ansible_os_family == 'Debian'
 
+- name: config_plugins | Install Plugins dependencies RedHat
+  package: 
+    name: "{{ item }}"
+    state: present
+  with_items: "{{ nagios_plugins_rh_packages }}"
+  when: ansible_os_family == 'RedHat'
 
 - name: upgrade pip
   command: "pip install {{ nagios_plugins_required_pip }}"
