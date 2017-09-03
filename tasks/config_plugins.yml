@@ -1,9 +1,16 @@
 ---
 # file: task/config_plugins.yml
 
-- name: Install Plugins dependencies
-  package: name={{ item }} state=present
+- name: config_plugins | Install Plugins dependencies Debian
+  apt: 
+    name: "{{ item }}"
+    state: present
+    cache_valid_time: 43200
+    #force: yes
+  environment:
+    DEBIAN_FRONTEND: noninteractive
   with_items: "{{ nagios_plugins_apt_packages }}"
+  when: ansible_os_family == 'Debian'
 
 
 - name: upgrade pip
