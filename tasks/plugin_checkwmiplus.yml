@@ -69,11 +69,11 @@
 - name:  plugin_checkwmiplus | lineinfile - configure resource.cfg $USER6$ $USER8$ $USER9$
   lineinfile: dest="{{ nagios_etc }}/resource.cfg" regexp='{{ item.src }}' line="{{ item.value }}"
   with_items:
-  - src: "^$USER6$="
+  - src: '^\$USER6\$='
     value: "$USER6$={{ nagios_plugins_dir_opt }}"
-  - src: "^$USER8$="
+  - src: '^\$USER8\$='
     value: "$USER8$={{ nagios_plugins_USER8_wmi_username }}"    
-  - src: "^$USER9$="
+  - src: '^\$USER9\$='
     value: "$USER9$={{ nagios_plugins_USER9_wmi_password }}"    
   notify: Reload Nagios
   tags:
