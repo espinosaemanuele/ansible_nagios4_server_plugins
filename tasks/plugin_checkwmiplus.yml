@@ -3,6 +3,8 @@
 # Some special steps are required and maybe not compatible with future distributions
 # The compiling steps takes some time so a dedicated playbook will handle it. 
 # http://www.edcint.co.nz/checkwmiplus/InstallationTerminalSession
+# https://support.nagios.com/kb/article.php?id=579
+# https://assets.nagios.com/downloads/nagiosxi/docs/Monitoring-Windows-Using-WMI-and-Nagios-XI.pdf
 
 - name: plugin_checkwmiplus | Install wmic dependencies
   package: name={{ nagios_plugin_checkwmiplus_dependencies | join(',') }} state=present
