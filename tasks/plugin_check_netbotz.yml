@@ -1,0 +1,10 @@
+---
+
+- name: copy snmp mibs for netbotz
+  copy:
+    remote_src: yes
+    src: "{{ nagios_plugins_dir }}/check_netbotz/check_netbotz/PowerNet-MIB.mib"
+    dest: "{{ nagios_plugins_snmp_dir }}"
+    owner: "root"
+    group: "root"
+    mode: "755"

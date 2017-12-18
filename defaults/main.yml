@@ -43,6 +43,7 @@ nagios_plugins_apt_packages:
     - libnumber-format-perl # required for checkwmiplus
     - libconfig-inifiles-perl # required for checkwmiplus
     - libdatetime-perl # required for checkwmiplus
+    - python-netsnmp  # required for check_netbotz
 
 # TODO fix names to get it working on redhat based distribution
 nagios_plugins_rh_packages:
@@ -60,11 +61,17 @@ nagios_plugins_rh_packages:
     - libnumber-format-perl # required for checkwmiplus
     - libconfig-inifiles-perl # required for checkwmiplus
     - libdatetime-perl # required for checkwmiplus
+    - net-snmp-python  # required for check_netbotz
 
 nagios_plugins_required_pip: "pip>=9.0.1"
 
 nagios_plugins_repos:
     - repo: "https://github.com/jonschipp/nagios-plugins.git"
       dest: "{{ nagios_plugins_dir }}/jonschipp"
+    - repo: "https://github.com/tomerazran/nagios-plugins.git"
+      dest: "{{ nagios_plugins_dir }}/check_netbotz"
+
+nagios_plugins_check_netbotz_tweaks: True
+nagios_plugins_snmp_dir: "/usr/share/snmp/mibs/"
 
 nagios_config_commands_nrpe_port: 5666

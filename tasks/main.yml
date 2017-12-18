@@ -15,6 +15,11 @@
   tags:
     - config_nagios_plugins
 
+- include: plugin_check_netbotz.yml
+  when: nagios_plugins_check_netbotz_tweaks | bool
+  tags:
+    - config_nagios_plugins
+
 - include: tests.yml
   tags:
     - test_nagios_plugins
