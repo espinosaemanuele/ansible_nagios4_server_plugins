@@ -38,7 +38,7 @@
   tags:
     - skip-ansible-lint
 
-- name: Install plugins from pip packages
+- name: Install plugins from pip3 packages
   command: "pip3 install {{ item }}"
   changed_when: false
   with_items: "{{ nagios_plugins_pip3_packages }}"

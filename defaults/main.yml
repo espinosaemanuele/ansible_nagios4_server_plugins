@@ -21,6 +21,8 @@ nagios_plugins_install_checkwmiplus: False
 
 nagios_plugins_pip3_packages:
     - "nagios_sql>=0.5.0"
+    - "curlnagios>=0.5"
+    - "sp-health>=0.2.2"
 
 nagios_plugins_pip2_packages:
     - "setuptools>=35.0.2" # required to not fail when using git+https
