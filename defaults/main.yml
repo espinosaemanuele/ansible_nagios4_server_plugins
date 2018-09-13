@@ -21,7 +21,7 @@ nagios_plugins_install_checkwmiplus: False
 
 nagios_plugins_pip3_packages:
     - "nagios_sql>=0.5.0"
-    - "curlnagios>=0.5.1"
+    - "curlnagios>=0.6.0"
     - "sp-health>=0.2.3"
 
 nagios_plugins_pip2_packages:
