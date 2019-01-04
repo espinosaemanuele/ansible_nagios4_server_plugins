@@ -26,14 +26,13 @@ Requirements
 
 It requires you have nagios4_server already setup, recommended with our ansible role.
 
-
 Role Distribution support
 ------------------------
 
 Ubuntu: ok  
 Debian: ok  
 RedHat: No  please check tests.txt file for details.  
-Ubuntu latest: No  please check tests.txt file for details. 
+Ubuntu latest LTS: ok
 
 Role Variables
 --------------
@@ -66,6 +65,10 @@ Example Playbook
         - nagios4_server_plugins
 
 ### Full list of roles:
+
+See [requirements.yml](requirements.yml) for some example on names of the roles.
+
+Most of them could be `coffeeitwork.name` instead of just name, but the example is with names simplified.
 
 ``` yaml
 - name: apply Nagios settings

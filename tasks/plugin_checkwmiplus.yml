@@ -57,7 +57,7 @@
     dest: "{{ nagios_config_cfg_plugins }}/{{ item.dest }}"
     owner: 'nagios'
     group: 'nagios'
-    mode: 0644
+    mode: "u=rw,g=rw,o=r"
   with_items:
     - { src: 'plugin_checkwmiplus/plugin_checkwmiplus.cfg.j2', dest: 'plugin_checkwmiplus.cfg' }
   notify: Reload Nagios

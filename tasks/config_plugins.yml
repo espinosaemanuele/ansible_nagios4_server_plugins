@@ -3,13 +3,12 @@
 
 - name: config_plugins | Install Plugins dependencies Debian
   apt: 
-    name: "{{ item }}"
+    name: "{{ nagios_plugins_apt_packages }}"
     state: present
     cache_valid_time: 43200
     #force: yes
   environment:
     DEBIAN_FRONTEND: noninteractive
-  with_items: "{{ nagios_plugins_apt_packages }}"
   when: ansible_os_family == 'Debian'
 
 - name: config_plugins | Install Plugins dependencies RedHat
@@ -19,6 +18,14 @@
   with_items: "{{ nagios_plugins_rh_packages }}"
   when: ansible_os_family == 'RedHat'
 
+- name: Remove conflicting packages ubuntu-14
+  apt:
+    name: [ "python-distutils-extra", "python3-distutils-extra" ]
+    state: absent
+  when: 
+    - ansible_facts['distribution'] == "Ubuntu" 
+    - ansible_facts['distribution_major_version'] == "14"
+
 - name: upgrade pip
   command: "pip install {{ nagios_plugins_required_pip }}"
   changed_when: false
@@ -26,7 +33,7 @@
     - skip-ansible-lint
 
 - name: Install plugins from pip packages
-  command: "pip2 install {{ item }}"
+  command: "pip2 install --ignore-installed {{ item }}"
   changed_when: false
   with_items: "{{ nagios_plugins_pip2_packages }}"
   tags:
@@ -39,14 +46,14 @@
     - skip-ansible-lint
 
 - name: Install plugins from pip3 packages
-  command: "pip3 install {{ item }}"
+  command: "pip3 install --ignore-installed {{ item }}"
   changed_when: false
   with_items: "{{ nagios_plugins_pip3_packages }}"
   tags:
     - skip-ansible-lint
 
 - name: create plugins directory for plugins libs
-  file: 'path={{ nagios_plugins_dir }} owner=root group=root mode=0755 state=directory'
+  file: 'path={{ nagios_plugins_dir }} owner=root group=root mode="u+rwx,g+rx,o+rx" state=directory'
 
 - name: Install plugins on plugins dir
   copy: 
@@ -65,7 +72,7 @@
   with_items: "{{ nagios_plugins_repos }}"
 
 - name: create plugins directory for commands cfg
-  file: 'path={{ nagios_config_cfg_plugins }} owner=nagios group=nagios mode=775 state=directory'
+  file: 'path={{ nagios_config_cfg_plugins }} owner=nagios group=nagios mode="u+rwx,g+rwx,o+rx" state=directory'
 
 - name: configure the commands for plugins
   template:
@@ -73,7 +80,7 @@
     dest: '{{ nagios_config_cfg_plugins }}/{{ item | basename | regex_replace("\.j2","") }}'
     owner: 'nagios'
     group: 'nagios'
-    mode: 0644
+    mode: "u=rw,g=r,o=r"
   with_fileglob:
     - ../templates/commands/*
 
@@ -85,7 +92,7 @@
     dest: '{{ nagios_config_cfg_plugins }}/{{ item.dest }}'
     owner: 'nagios'
     group: 'nagios'
-    mode: 0644
+    mode: "u=rw,g=r,o=r"
   with_items:
     - { src: 'check_nrpe.cfg.j2', dest: 'check_nrpe.cfg' }
     - { src: 'plugin-check_url_status.cfg.j2', dest: "plugin-check_url_status.cfg" }
