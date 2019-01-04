@@ -33,7 +33,7 @@
     - skip-ansible-lint
 
 - name: Install plugins from pip packages
-  command: "pip2 install {{ item }}"
+  command: "pip2 install --ignore-installed {{ item }}"
   changed_when: false
   with_items: "{{ nagios_plugins_pip2_packages }}"
   tags:
@@ -46,7 +46,7 @@
     - skip-ansible-lint
 
 - name: Install plugins from pip3 packages
-  command: "pip3 install {{ item }}"
+  command: "pip3 install --ignore-installed {{ item }}"
   changed_when: false
   with_items: "{{ nagios_plugins_pip3_packages }}"
   tags:
