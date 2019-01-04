@@ -25,10 +25,10 @@ nagios_plugins_pip3_packages:
     - "sp-health>=0.2.3"
 
 nagios_plugins_pip2_packages:
-    - "setuptools>=40.6.3" # required to not fail when using git+https
+    - "setuptools>=35.0.2" # required to not fail when using git+https
     - "--upgrade git+https://github.com/pablodav/nelmon.git"
 
-nagios_plugins_required_pip: "pip>=18.1"
+nagios_plugins_required_pip: "pip>=9.0.1"
 
 nagios_plugins_repos:
     - repo: "https://github.com/jonschipp/nagios-plugins.git"
