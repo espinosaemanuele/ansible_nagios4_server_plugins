@@ -20,7 +20,7 @@ nagios_cgi_file: "{{ nagios_etc }}/cgi.cfg"
 nagios_plugins_install_checkwmiplus: False
 
 nagios_plugins_pip3_packages:
-    - "nagios_sql>=0.6.0"
+    - "nagios_sql>=0.8.0"
     - "curlnagios>=0.6.0"
     - "sp-health>=0.2.3"
 
