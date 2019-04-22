@@ -18,22 +18,23 @@
 
 - block: 
   
-  - name: plugin_checkwmiplus | create /root/wmi-1.3.14 directory
+  - name: plugin_checkwmiplus | create /root/wmi-{{ nagios_plugins_wmi_version }} directory
     file: 
-      path: "/root/wmi-1.3.14"
+      path: "/root/wmi-{{ nagios_plugins_wmi_version }}"
       state: directory
 
   - name: plugin_checkwmiplus | Uncompress wmi
     unarchive:
-      src: "plugin_checkwmiplus/wmi-1.3.14.tar.gz"
-      dest: "/root/wmi-1.3.14"
+      src: "plugin_checkwmiplus/wmi-{{ nagios_plugins_wmi_version }}.tar.gz"
+      dest: "/root/wmi-{{ nagios_plugins_wmi_version }}"
 
   - name: plugin_checkwmiplus | Compile and install wmic
-    shell: 'make "CPP=gcc -E -ffreestanding"'
+    shell: 'sh -c "ulimit -n 100000 && export ZENHOME=/usr && make \"CPP=gcc -E -ffreestanding\" "'
     become: yes
+    become_method: sudo
     args:
       creates: "/bin/wmic"
-      chdir: "/root/wmi-1.3.14/wmi-1.3.14/"
+      chdir: "/root/wmi-{{ nagios_plugins_wmi_version }}/wmi-{{ nagios_plugins_wmi_version }}/"
 
 - name: plugin_checkwmiplus | create {{ nagios_plugins_dir_opt }} directory
   file: 
