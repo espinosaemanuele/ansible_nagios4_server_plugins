@@ -14,6 +14,10 @@ Options to add plugins to your nagios:
   * Install from pip2 with `nagios_plugins_pip2_packages` var.
   * add apt packages with `nagios_plugins_apt_packages` var.
 
+To install wmic and wmiplus plugin and commands (Also supports Ubuntu 16.04+):
+
+    nagios_plugins_install_checkwmiplus: True
+
 Then add the commands to use it, edit `templates/commands/command_file.cfg`.
 
 Those will be copied automatically to right place.
@@ -44,9 +48,11 @@ Plugins to {{ nagios_plugins_dir }}
 
 For your hosts/groups_vars:
 
+```yaml
 check_url_proxy_server: 'proxy_server'
 check_url_proxy_user: 'proxy_user'
 check_url_proxy_password: 'proxy_password'
+```
 
 Dependencies
 ------------
@@ -79,7 +85,7 @@ Most of them could be `coffeeitwork.name` instead of just name, but the example 
     - { role: nagios4_server, tags: ["install", "nagios4_server_all", "nagios4_server"] }
     - { role: nagios4_server_plugins, tags: ["install", "nagios4_server_all", "nagios4_server_plugins"] }
     - { role: nagios4_server_pnp4nagios, tags: ["install", "nagios4_server_all", "nagios4_server_pnp4nagios"] }
-    - { role: ANXS.mysql, tags: ["install", "nagios4_server_all", "nagios4_server_thruk", "ANXS.mysql"] }
+    - { role: geerlingguy.mysql, tags: ["install", "nagios4_server_all", "nagios4_server_thruk", "ANXS.mysql"] }
     - { role: nagios4_server_thruk, tags: ["install", "nagios4_server_all", "nagios4_server_thruk"] }
     - { role: postfix_client, tags: ["install", "nagios4_server_all", "postfix_client"] }
 # Additional tags: role/tag
