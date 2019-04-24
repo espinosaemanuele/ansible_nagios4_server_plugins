@@ -33,8 +33,17 @@
     become: yes
     become_method: sudo
     args:
-      creates: "/bin/wmic"
+      creates: "/root/wmi-{{ nagios_plugins_wmi_version }}/wmi-{{ nagios_plugins_wmi_version }}/Samba/source/bin/wmic"
       chdir: "/root/wmi-{{ nagios_plugins_wmi_version }}/wmi-{{ nagios_plugins_wmi_version }}/"
+
+- name: plugin_checkwmiplus | copy wmic to /bin/wmic
+  copy:
+    src: "/root/wmi-{{ nagios_plugins_wmi_version }}/wmi-{{ nagios_plugins_wmi_version }}/Samba/source/bin/wmic"
+    dest: /bin/wmic
+    owner: root
+    group: root
+    mode: u=rwx,g=rwx,o=rx
+    remote_src: yes
 
 - name: plugin_checkwmiplus | create {{ nagios_plugins_dir_opt }} directory
   file: 
