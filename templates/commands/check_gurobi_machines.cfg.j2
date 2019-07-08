@@ -1,0 +1,7 @@
+# https://github.com/CoffeeITWorks/nagios_gurobi_machines_plugin
+# {{ ANSIBLE_MANAGED }}
+
+define command{
+    command_name  check_gurobi_machines
+    command_line  /usr/local/bin/gurobi_machines_plugin --url '$ARG1$' --client_id '$ARG2$' --client_secret '$ARG3$' --outdated_minute $ARG4$  $ARG5$
+}
