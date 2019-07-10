@@ -4,6 +4,17 @@ check_url_proxy_server: 'proxy_server'
 check_url_proxy_user: 'proxy_user'
 check_url_proxy_password: 'proxy_password'
 
+# Setup proxy environment for some plugins that uses proxy env, like gurobi_machines and many others that also uses curl or other language.
+# python requests for example uses proxy environemnt too.
+nagios_plugins_https_proxy_env: 'http://user:password@hostaddress:port'
+# Example 2, use your already created https_proxy environment:
+# where you have in your group_vars/all/common.yml file:
+#proxy_env:
+#  http_proxy: 'http://user:password@hostaddress:port'
+#  https_proxy: 'http://user:password@hostaddress:port'
+#  ftp_proxy: 'http://user:password@hostaddress:port'
+#  no_proxy: 'localhost,127.0.0.1,.group.upm.com,.upmuruguay.com.uy,.griffin-domain.net'
+# nagios_plugins_https_proxy_env: "{{ proxy_env.https_proxy }}"
 
 nagios_etc: '/usr/local/nagios/etc'
 nagios_config_cfg_dir: "{{ nagios_etc }}/conf.d"
