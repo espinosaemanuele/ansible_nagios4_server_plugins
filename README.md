@@ -20,6 +20,8 @@ To install wmic and wmiplus plugin and commands (Also supports Ubuntu 16.04+):
 
 Then add the commands to use it, edit `templates/commands/command_file.cfg`.
 
+Or also add files in `templates/commands` dir in this role.
+
 Those will be copied automatically to right place.
 
 Please check the actual amount of commands already delivered with plugins.
@@ -64,11 +66,16 @@ Example Playbook
 
 ### Minimum usage:
 
-    - hosts: servers
-      roles:
-        - ANXS.mysql
-        - nagios4_server
-        - nagios4_server_plugins
+```yaml
+
+- hosts: servers_nagios
+  vars:
+    nagios_plugins_install_checkwmiplus: True
+  roles:
+    - role: ansible-role-nagios
+    - role: coffeeitworks.ansible_nagios4_server_config
+    - role: ansible_nagios4_server_plugins
+```
 
 ### Full list of roles:
 
