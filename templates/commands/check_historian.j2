@@ -1,8 +1,0 @@
-# https://github.com/CoffeeITWorks/nagios_gurobi_machines_plugin
-# {{ ansible_managed }}
-
-define command{
-    command_name  check_nagios_historian
-    command_line  /usr/local/bin/nagios_historian --url "$ARG1$" --client_id "$ARG2$" --client_secret "$ARG3$" --auth_url "$ARG4$" --oauth2 --instance "$ARG5$" --extra_args='$ARG6$'
-}
-
