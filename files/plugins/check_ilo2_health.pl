@@ -10,7 +10,7 @@
 # checks if all sensors are ok, returns warning on high temperatures and
 # fan failures and critical on overall health failure
 #
-# Alexander Greiner-Baer <alexander.greiner-baer@web.de> 2007 - 2015
+# Alexander Greiner-Baer <alexander.greiner-baer@web.de> 2007 - 2018
 # Matthew Stier <Matthew.Stier@us.fujitsu.com> 2011
 #
 # This program is free software: you can redistribute it and/or modify
@@ -28,6 +28,14 @@
 #
 #
 # Changelog:
+# 1.63    Tue, 13 Nov 2018 18:41:48 +0100
+#   support iLO5 firmware infos
+#   applied patch from Rene Koch
+#     ignore link unknown (option "-U")
+# 1.62    Mon, 14 May 2018 19:05:22 +0200
+#   retrieve firmware infos only when using --getinfos
+# 1.61    Thu, 01 Jun 2017 20:05:04 +0200
+#   fix for iLO4 2.50 link state when using --ignorelinkdown
 # 1.60    Wed, 12 Aug 2015 18:20:13 +0200
 #   provide --sslopts to override defaults settings
 #   fix }; for GET_EVENT_LOG
@@ -167,7 +175,7 @@ use XML::Simple;
 $Net::SSLeay::slowly = 5;
 
 use vars qw($VERSION $PROGNAME  $verbose $warn $critical $timeout $result);
-$VERSION = 1.60;
+$VERSION = 1.63;
 
 $PROGNAME = "check_ilo2_health";
 
@@ -180,9 +188,9 @@ our $p = Nagios::Plugin->new(
   [ -o|--powerredundancy ] [ -b|--locationlabel ] [ -l|--eventlogcheck]
   [ -i|--ignorelinkdown ] [ -x|--ignorebatterymissing ] [ -s|--sslv3 ]
   [ -t <timeout> ] [ -r <retries> ] [ -g|--getinfos ] [ --sslopts ]
-  [ -v|--verbose ] ",
+  [ -U|--ignorelinkunknown ] [ -v|--verbose ] ",
         version => $VERSION,
-        blurb => 'This plugin checks the health status on a remote iLO2|3|4 device
+        blurb => 'This plugin checks the health status on a remote iLO2|3|4|5 device
 and will return OK, WARNING or CRITICAL. iLO (integrated Lights-Out)
 can be found on HP Proliant servers.'
 );
@@ -274,6 +282,13 @@ $p->add_arg(
 );
 
 $p->add_arg(
+  spec => 'ignorelinkunknown|U',
+  help =>
+  qq{-U, --ignorelinkunknown
+  Ignore NIC Link Unknown status (iLO5).},
+);
+
+$p->add_arg(
   spec => 'notemperatures|n',
   help =>
   qq{-n, --notemperatures
@@ -298,7 +313,7 @@ $p->add_arg(
   spec => 'ilo3|3',
   help =>
   qq{-3, --ilo3
-  Check iLO3|4 device.},
+  Check iLO version >= 3 device.},
 );
 
 $p->add_arg(
@@ -355,6 +370,7 @@ my $perfdata = defined($p->opts->perfdata) ? 1 : 0;
 my $locationlabel = defined($p->opts->locationlabel) ? 1 : 0;
 my $eventlogcheck = defined($p->opts->eventlogcheck) ? 1 : 0;
 my $ignorelinkdown = defined($p->opts->ignorelinkdown) ? 1 : 0;
+my $ignorelinkunknown = defined($p->opts->ignorelinkunknown) ? 1 : 0;
 my $ignorebatterymissing = defined($p->opts->ignorebatterymissing) ? 1 : 0;
 my $getinfos = defined($p->opts->getinfos) ? 1 : 0;
 our %drives;
@@ -515,10 +531,10 @@ if ( $getinfos ) {
   # loop through firmware hash
   foreach my $index (keys %{ $xml->{'FIRMWARE_INFORMATION'}[0] }) {
     if (defined $xml->{'FIRMWARE_INFORMATION'}[0]->{$index}[0]->{'FIRMWARE_NAME'}[0]->{'VALUE'}) {
-      if ($xml->{'FIRMWARE_INFORMATION'}[0]->{$index}[0]->{'FIRMWARE_NAME'}[0]->{'VALUE'} eq "iLO") {
-        $firmware_name    = 'iLO';
+      if ($xml->{'FIRMWARE_INFORMATION'}[0]->{$index}[0]->{'FIRMWARE_NAME'}[0]->{'VALUE'} =~ m/^iLO/) {
+        $firmware_name    = $xml->{'FIRMWARE_INFORMATION'}[0]->{$index}[0]->{'FIRMWARE_NAME'}[0]->{'VALUE'};
         $firmware_version = $xml->{'FIRMWARE_INFORMATION'}[0]->{$index}[0]->{'FIRMWARE_VERSION'}[0]->{'VALUE'};
-      } elsif ($xml->{'FIRMWARE_INFORMATION'}[0]->{$index}[0]->{'FIRMWARE_NAME'}[0]->{'VALUE'} eq "HP ProLiant System ROM") {
+      } elsif ($xml->{'FIRMWARE_INFORMATION'}[0]->{$index}[0]->{'FIRMWARE_NAME'}[0]->{'VALUE'} eq "HP ProLiant System ROM" || $xml->{'FIRMWARE_INFORMATION'}[0]->{$index}[0]->{'FIRMWARE_NAME'}[0]->{'VALUE'} eq "System ROM") {
         $system_rom = $xml->{'FIRMWARE_INFORMATION'}[0]->{$index}[0]->{'FIRMWARE_VERSION'}[0]->{'VALUE'};
       }
     }
@@ -603,7 +619,10 @@ foreach (keys %{$health}) {
     elsif ( ( $_ eq 'BATTERY' ) && $ignorebatterymissing && ( $componentstate =~ m/^Not Installed$/i ) ) {
       next;
     }
-    elsif ( ( $_ eq 'NETWORK' ) && $ignorelinkdown && ( $componentstate =~ m/^Link Down$/i ) ) {
+    elsif ( ( $_ eq 'NETWORK' ) && $ignorelinkdown && ( $componentstate =~ m/^Link Down$/i || $componentstate =~ m/^Degraded$/i ) ) {
+      next;
+    }
+    elsif ( ( $_ eq 'NETWORK' ) && $ignorelinkunknown && ( $componentstate =~ m/^Unknown$/i ) ) {
       next;
     }
     else {
@@ -952,18 +971,23 @@ sub parse_reply
   $line =~ s/\r\n$/\n/;
   print $line if ( $p->opts->verbose );
 
-  # Prune all unnecessary lines
-  $isinput = 1 if ( $line =~ m"<GET_EMBEDDED_HEALTH_DATA>|</DRIVES>" );
-  $xmlinput .= $line if ( $isinput );
-  $isinput = 0 if ( $line =~ m"</GET_EMBEDDED_HEALTH_DATA>|<DRIVES>" );
-
   if ( $getinfos ) {
+    # Prune all unnecessary lines
+    $isinput = 1 if ( $line =~ m"<GET_EMBEDDED_HEALTH_DATA>|</DRIVES>" );
+    $xmlinput .= $line if ( $isinput );
+    $isinput = 0 if ( $line =~ m"</GET_EMBEDDED_HEALTH_DATA>|<DRIVES>" );
     $product_name = $line if ( $line =~ m"<PRODUCT_NAME VALUE" );
     $serial_number = $line if ( $line =~ m/FIELD NAME="Serial Number"/ );
     $server_name = $line if ( $line =~ m"<SERVER_NAME" );
     @product = split (/"/, $product_name)  if defined $product_name;
     @serial  = split (/"/, $serial_number) if defined $serial_number;
     @sname   = split (/"/, $server_name )  if defined $server_name;
+  }
+  else {
+    # Prune all unnecessary lines
+    $isinput = 1 if ( $line =~ m"<GET_EMBEDDED_HEALTH_DATA>|</DRIVES>|</FIRMWARE_INFORMATION>" );
+    $xmlinput .= $line if ( $isinput );
+    $isinput = 0 if ( $line =~ m"</GET_EMBEDDED_HEALTH_DATA>|<DRIVES>|<FIRMWARE_INFORMATION>" );
   }
 
   # drive check needs special handling
