@@ -12,20 +12,34 @@ nagios_plugin_checkwmiplus_dependencies:
   - make
   - wget
 
-# TODO fix names to get it working on redhat based distribution
 nagios_plugins_rh_packages:
     - git
-    - libnet-dns-perl  # required for check_iftraffic43a.pl
-    - libnagios-plugin-perl # required for hp ilo
-    - libxml-simple-perl # required for hp ilo
     #- php5-sybase # required for check_mssql.php
     #- update-notifier-common # Required for check_nrpe_os_update (only use it on client ubuntu, doesn't works on debian)
-    - snmp
     - python-pip
     - python3-pip
-    - python-dev  # required for m2crypto
-    - nagios-plugins # required for some perl modules /usr/lib/nagios/plugins/utils.pm
-    - libnumber-format-perl # required for checkwmiplus
-    - libconfig-inifiles-perl # required for checkwmiplus
-    - libdatetime-perl # required for checkwmiplus
+    - python-devel  # required for m2crypto
     - net-snmp-python  # required for check_netbotz
+    - ntp
+    - nagios-plugins-all
+    - nagios-plugins-nrpe
+    - nrpe
+    - nagios-plugins-users 
+    - nagios-plugins-load 
+    - nagios-plugins-swap 
+    - nagios-plugins-disk
+    - nagios-plugins-procs
+    - perl-Sys-Statistics-Linux # For check_linux_stats.pl
+    # - update-notifier-common  # For check_nrpe_os_update
+    - perl-Nagios-Plugin   # For many plugins, ej: check_mem.pl
+    - gettext
+    - wget
+    - openssl-devel
+    - net-snmp
+    - net-snmp-utils # required for checkwmiplus
+    - perl-Net-SNMP
+    - perl-Net-DNS
+    - perl-XML-Simple # required for hp ilo
+    - perl-Number-Format
+    - perl-Config-IniFiles # required for checkwmiplus
+    - perl-DateTime # required for checkwmiplus
