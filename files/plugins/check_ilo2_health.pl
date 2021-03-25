@@ -186,6 +186,7 @@ use XML::Simple;
 $Net::SSLeay::slowly = 5;
 
 use vars qw($VERSION $PROGNAME  $verbose $warn $critical $timeout $result);
+
 $VERSION = 1.65;
 
 $PROGNAME = "check_ilo2_health";
@@ -202,6 +203,7 @@ our $p = Nagios::Plugin->new(
   [ -U|--ignorelinkunknown ] [ -L|--eventlogiLO ] [ -S|--iLOselftest ]
   [ -O|--ignorecacheother ]
   [ -v|--verbose ] ",
+
         version => $VERSION,
         blurb => 'This plugin checks the health status on a remote iLO2|3|4|5 device
 and will return OK, WARNING or CRITICAL. iLO (integrated Lights-Out)
