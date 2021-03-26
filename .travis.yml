@@ -9,8 +9,7 @@ before_install:
 
 install:
   - sudo apt-get install -y python-pip libssl-dev libffi-dev
-  - pip install molecule docker
-  - pip install docker-py
+  - pip install molecule[docker]
     #- ansible-galaxy install -r requirements.yml
 
 script:
